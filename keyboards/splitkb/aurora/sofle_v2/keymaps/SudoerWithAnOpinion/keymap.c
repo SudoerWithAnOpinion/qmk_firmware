@@ -19,7 +19,44 @@ void keyboard_pre_init_user(void) {
 
 // Sets all letter keys to red when caps lock is on
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-  if (host_keyboard_led_state().caps_lock) {
+
+  if (get_highest_layer(layer_state) > 0) {
+    uint8_t layer = get_highest_layer(layer_state);
+    // TODO: Set the layer keys depending on layer & dim all non-configured keys
+    // TODO: Set the number keys to a different color depending on the layer number
+    uint8_t KEY_1_LED = 10;
+    uint8_t KEY_2_LED = 9;
+    uint8_t KEY_3_LED = 8;
+    uint8_t KEY_RAISE_LED = 66;
+    uint8_t KEY_LOWER_LED = 31;
+    if (layer == 1) {
+      rgb_matrix_set_color(KEY_1_LED, RGB_BLUE);
+      rgb_matrix_set_color(KEY_LOWER_LED, RGB_BLUE);
+    } else if (layer == 2) {
+      rgb_matrix_set_color(KEY_2_LED, RGB_BLUE);
+      rgb_matrix_set_color(KEY_RAISE_LED, RGB_BLUE);
+    } else if (layer == 3) {
+      rgb_matrix_set_color(KEY_3_LED, RGB_BLUE);
+      rgb_matrix_set_color(KEY_RAISE_LED, RGB_BLUE);
+      rgb_matrix_set_color(KEY_LOWER_LED, RGB_BLUE);
+    }
+    // Turn off non-configured keys... need to get a matrix for LED index to keycode
+    // for (uint8_t i = led_min; i < led_max; i++) {
+    //     if (g_led_config.flags[i] & LED_FLAG_NONE) {
+    //         rgb_matrix_set_color(i, 0, 0, 0);
+    //     }
+    // }
+  }
+    // ---OVERRIDE INDICATORS---
+
+    // CAPS WORD indicator override
+    uint8_t LEFT_SHIFT_LED = 29;
+    if (is_caps_word_on()) {
+      rgb_matrix_set_color(LEFT_SHIFT_LED, RGB_GREEN);
+    }
+
+  // CAPS LOCK Override: If CAPS LOCK is on, all letter keys will be red if on Layer 0
+    if (host_keyboard_led_state().caps_lock) {
       uint8_t layer = get_highest_layer(layer_state);
       if (layer == 0){
         for (uint8_t i = led_min; i < led_max; i++) {
@@ -39,3 +76,37 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
   }
   return false;
 }
+
+// #ifdef ENCODER_ENABLE
+// bool encoder_update_user(uint8_t index, bool clockwise) {
+//     if (!encoder_update_user(index, clockwise)) {
+//         return false;
+//     }
+//     // 0 is left-half encoder,
+//     // 1 is right-half encoder
+//     if (index == 0) {
+//         // Volume control
+//         if (clockwise) {
+//             tap_code(KC_VOLU);
+//         } else {
+//             tap_code(KC_VOLD);
+//         }
+//     } else if (index == 1) {
+//         // Page up/Page down
+//         if (clockwise) {
+//             tap_code(KC_MS_WH_DOWN);
+//         } else {
+//             tap_code(KC_MS_WH_UP);
+//         }
+//     }
+//     return false;
+// }
+// #endif
+
+// void caps_word_set_user(bool active) {
+//     if (active) {
+//         writePinLow(24);
+//     } else {
+//         writePinHigh(24);
+//     }
+// }
