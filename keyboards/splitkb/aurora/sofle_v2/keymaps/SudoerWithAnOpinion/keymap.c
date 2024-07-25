@@ -20,20 +20,22 @@ void keyboard_pre_init_user(void) {
 // Sets all letter keys to red when caps lock is on
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
   if (host_keyboard_led_state().caps_lock) {
-    for (uint8_t i = led_min; i < led_max; i++) {
-
-      // if (g_led_config.flags[i] & LED_FLAG_KEYLIGHT) {
-      //     rgb_matrix_set_color(i, RGB_RED);
-      // }
-      // Check if key is a letter key, if so: set it to red
-      if ((i >= 12 && i <= 16) || (i >= 18 && i <= 22) || (i >= 24 && i <= 28) ||
-          (i >= 47 && i <= 51)
-          ||( i >= 53 && i <= 63)
+      uint8_t layer = get_highest_layer(layer_state);
+      if (layer == 0){
+        for (uint8_t i = led_min; i < led_max; i++) {
+        // Check if key is a letter key, if so: set it to red
+          if (
+              (i >= 12 && i <= 16) || (i >= 18 && i <= 22)
+          || (i >= 24 && i <= 28) || (i >= 47 && i <= 51)
+          || (i >= 53 && i <= 56) || (i >= 59 && i <= 60)
           ) {
-          rgb_matrix_set_color(i, RGB_RED);
+            rgb_matrix_set_color(i, RGB_RED);
+          }
+        }
+      }else if (layer == 2) {
+        // If the layer is 2, get the CAPS_LOCK key to RED as well to indicate that CAPS_LOCK is on
+        rgb_matrix_set_color(18, RGB_RED);
       }
-
-    }
   }
   return false;
 }
