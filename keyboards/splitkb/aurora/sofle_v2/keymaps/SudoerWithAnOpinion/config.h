@@ -18,7 +18,9 @@
 #define SPLIT_LED_STATE_ENABLE
 #define SPLIT_LAYER_STATE_ENABLE
 #define RGB_MATRIX_SLEEP
-// #define ENCODER_ENABLE
+// #define BOTH_SHIFTS_TURNS_ON_CAPS_WORD // Disabled to allow Auto-Shift to have this activation
+#define DOUBLE_TAP_SHIFT_TURNS_ON_CAPS_WORD
+// #define ENCODER_ENABLE // Aleady Enabled
 // #define RGB_MATRIX_KEYPRESSES
 // #define ENABLE_RGB_MATRIX_SOLID_REACTIVE_SIMPLE
 // #define ENABLE_RGB_MATRIX_SOLID_SPLASH
