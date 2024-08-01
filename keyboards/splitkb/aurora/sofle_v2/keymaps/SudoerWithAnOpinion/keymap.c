@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include QMK_KEYBOARD_H
 #include "oled.c"
+
 // TAP DANCE DEFINITIONS
 enum {
     TD_ESC_CAPS,
@@ -29,7 +30,6 @@ void keyboard_pre_init_user(void) {
   // Turn off AUtOSHIFT, by default
     autoshift_disable();
 }
-
 // Sets all letter keys to red when caps lock is on
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 
@@ -96,6 +96,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 }
 
 bool encoder_update_user(uint8_t index, bool clockwise) {
+  const uint8_t layer = get_highest_layer(layer_state);
   /* With an if statement we can check which encoder was turned. */
   if (index == 0) { /* First encoder */
     /* And with another if statement we can check the direction. */
@@ -113,10 +114,19 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
      keyboards will only have two, so this piece of code will suffice. */
   } else if (index == 1) { /* Second encoder */
     if (clockwise) {
-      tap_code(KC_MS_WH_DOWN);
+      if (layer == 1) {
+        tap_code(KC_AGAIN); // Not working (Mac OS at least)
+      } else {
+        tap_code(KC_MS_WH_DOWN);
+      }
     } else {
-      tap_code(KC_MS_WH_UP);
+      if (layer == 1) {
+        tap_code(KC_UNDO); // Not working (Mac OS at least)
+      } else {
+        tap_code(KC_MS_WH_UP);
+      }
     }
   }
   return false;
 }
+
